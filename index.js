@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.get("/", (req, res, next) => {
-  res.json("Hello World");
+  res.json("Hello World!");
 });
 
 app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
