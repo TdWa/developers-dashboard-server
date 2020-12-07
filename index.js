@@ -4,6 +4,7 @@ const { PORT } = require("./config/constants");
 const cors = require("cors");
 app.set("json spaces", 2);
 const authRouter = require("./routers/auth");
+const snippetRouter = require("./routers/snippets");
 
 // MiddleWares
 app.use(express.json());
@@ -13,6 +14,7 @@ app.use(cors());
 const User = require("./models").user;
 
 app.use("/", authRouter);
+app.use("/snippets", snippetRouter);
 
 app.get("/", async (req, res, next) => {
   try {
