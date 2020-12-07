@@ -1,12 +1,18 @@
 const { Router } = require("express");
 const Category = require("../models/").category;
+const auth = require("../auth/middleware");
 
 const router = new Router();
 
-// get all categories
-router.get("/", async (req, res) => {
+// get all categories belonging to the user
+router.get("/", auth, async (req, res) => {
   try {
-    const categories = await Category.findAll();
+    const userId = req.user.id;
+    const categories = await Category.findAll({
+      where: {
+        userId,
+      },
+    });
     return res.status(200).send(categories);
   } catch (e) {
     console.log(e);
@@ -14,8 +20,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-// add a new category
-router.post("/", async (req, res) => {
+// add a new category with userId
+router.post("/", auth, async (req, res) => {
   try {
     const userId = req.user.id;
     const name = req.body.category;
