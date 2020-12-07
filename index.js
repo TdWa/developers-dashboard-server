@@ -3,6 +3,7 @@ const app = express();
 const { PORT } = require("./config/constants");
 const cors = require("cors");
 app.set("json spaces", 2);
+const authRouter = require("./routers/auth");
 
 // MiddleWares
 app.use(express.json());
@@ -11,9 +12,7 @@ app.use(cors());
 
 const User = require("./models").user;
 
-// app.get("/", (req, res, next) => {
-//   res.json("Hello World!");
-// });
+app.use("/", authRouter);
 
 app.get("/", async (req, res, next) => {
   try {
