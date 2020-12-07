@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       category.hasMany(models.link);
       category.hasMany(models.snippet);
+      category.belongsTo(models.user);
     }
   }
   category.init(
@@ -18,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      userId: { type: DataTypes.INTEGER, allowNull: false },
     },
     {
       sequelize,
