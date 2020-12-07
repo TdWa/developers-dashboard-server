@@ -7,7 +7,7 @@ const router = new Router();
 // get all categories belonging to the user
 router.get("/", auth, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.dataValues.id;
     const categories = await Category.findAll({
       where: {
         userId,
@@ -23,7 +23,7 @@ router.get("/", auth, async (req, res) => {
 // add a new category with userId
 router.post("/", auth, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.dataValues.id;
     const name = req.body.category;
 
     const newCategory = await Category.create({ name, userId });
