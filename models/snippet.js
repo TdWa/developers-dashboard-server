@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class snippet extends Model {
     /**
@@ -10,18 +8,25 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      snippet.belongsTo(models.user);
+      snippet.belongsTo(models.category);
     }
-  };
-  snippet.init({
-    name: DataTypes.STRING,
-    content: DataTypes.TEXT,
-    comment: DataTypes.TEXT,
-    userId: DataTypes.INTEGER,
-    categoryId: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'snippet',
-  });
+  }
+  snippet.init(
+    {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      content: { type: DataTypes.TEXT, allowNull: false },
+      comment: DataTypes.TEXT,
+      userId: { type: DataTypes.INTEGER, allowNull: false },
+      categoryId: { type: DataTypes.INTEGER, allowNull: false },
+    },
+    {
+      sequelize,
+      modelName: "snippet",
+    }
+  );
   return snippet;
 };
