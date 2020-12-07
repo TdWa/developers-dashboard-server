@@ -29,4 +29,35 @@ router.post("/login", async (req, res) => {
     return res.status(400).send({ message: "Something went wrong, sorry" });
   }
 });
+
+router.post("/signup", async (req, res) => {
+  const { email, password, name } = req.body;
+  if (!email || !password || !name) {
+    return res
+      .status(400)
+      .send({ message: "Please provide an email, password and a name" });
+  }
+  try {
+    const newUser = await User.create({
+      email,
+      password: bcrypt.hashSync(password, SALT_ROUNDS),
+      name,
+    });
+
+    delete newUser.dataValues["password"];
+
+    const token = toJWT({ userId: newUser.id });
+
+    res.status(201).json({ token, ...newUser.dataValues });
+  } catch (e) {
+    console.log(e);
+
+    if (error.name === "SequelizeUniqueConstraintError") {
+      return res
+        .status(400)
+        .send({ message: "There is an existing account with this email" });
+    }
+  }
+});
+
 module.exports = router;
