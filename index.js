@@ -8,7 +8,7 @@ const authRouter = require("./routers/auth");
 const snippetRouter = require("./routers/snippets");
 
 const categoriesRouter = require("./routers/categories");
-
+const linksRouter = require("./routers/links");
 
 // MiddleWares
 app.use(express.json());
@@ -23,6 +23,7 @@ app.use("/snippets", snippetRouter);
 
 app.use("/categories", categoriesRouter);
 
+app.use("/links", linksRouter);
 
 app.get("/", async (req, res, next) => {
   try {
