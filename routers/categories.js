@@ -8,6 +8,7 @@ const router = new Router();
 router.get("/", auth, async (req, res) => {
   try {
     const userId = req.user.id;
+    console.log("req.quey", req.query);
     const categories = await Category.findAll({
       where: {
         userId,

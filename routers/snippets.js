@@ -6,12 +6,13 @@ const auth = require("../auth/middleware");
 
 router.get("/", auth, async (req, res, next) => {
   try {
-    const { userId } = req.user.id;
-    parseInt(userId);
-    console.log("userId is  ", userId);
+    console.log("i am req.user", req.user);
+    const id = req.user.dataValues.id;
+    parseInt(id);
+    console.log("userId is  ", id);
 
     const allSnippetsByUserId = await Snippet.findAll({
-      where: { userId: userId },
+      where: { userId: id },
     });
 
     res.status(200).send(allSnippetsByUserId);
