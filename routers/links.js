@@ -21,6 +21,23 @@ router.get("/", auth, async (req, res, next) => {
   }
 });
 
+
+router.delete("/deleteLink", async (req, res) => {
+  try {
+    const { id } = req.body;
+    const toDelete = await Link.findByPk(id);
+    if (!toDelete) {
+      res.status(404).send("Link not found");
+    } else {
+      await toDelete.destroy();
+      res.json(toDelete);
+    }
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+
 // create a link
 router.post("/", auth, async (req, res, next) => {
   try {
