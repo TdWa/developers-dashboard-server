@@ -22,6 +22,25 @@ router.patch("/", auth, async (req, res, next) => {
     next();
   }
 });
+router.patch("/comments", async (req, res, next) => {
+  try {
+    // console.log("i got hetre");
+    const { comment, id } = req.body;
+
+    const idToFind = parseInt(id);
+
+    // console.log("what is req.body?", req.body);
+
+    const snippet = await Snippet.findByPk(idToFind);
+
+    await snippet.update({ comment });
+
+    return res.status(201).send({ message: " snippet updated", snippet });
+  } catch (e) {
+    console.log("i am error", e.message);
+    next();
+  }
+});
 
 router.get("/", auth, async (req, res, next) => {
   try {
