@@ -1,5 +1,4 @@
 const { Router } = require("express");
-const User = require("../models/").user;
 const Link = require("../models/").link;
 const router = new Router();
 const auth = require("../auth/middleware");
@@ -22,6 +21,7 @@ router.get("/", auth, async (req, res, next) => {
   }
 });
 
+
 router.delete("/deleteLink", async (req, res) => {
   try {
     const { id } = req.body;
@@ -36,6 +36,7 @@ router.delete("/deleteLink", async (req, res) => {
     console.log(e);
   }
 });
+
 
 // create a link
 router.post("/", auth, async (req, res, next) => {

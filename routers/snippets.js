@@ -22,6 +22,25 @@ router.patch("/", auth, async (req, res, next) => {
     next();
   }
 });
+router.patch("/comments", async (req, res, next) => {
+  try {
+    // console.log("i got hetre");
+    const { comment, id } = req.body;
+
+    const idToFind = parseInt(id);
+
+    // console.log("what is req.body?", req.body);
+
+    const snippet = await Snippet.findByPk(idToFind);
+
+    await snippet.update({ comment });
+
+    return res.status(201).send({ message: " snippet updated", snippet });
+  } catch (e) {
+    console.log("i am error", e.message);
+    next();
+  }
+});
 
 router.get("/", auth, async (req, res, next) => {
   try {
@@ -61,4 +80,21 @@ router.post("/", auth, async (req, res, next) => {
   }
 });
 
+router.delete("/", async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    console.log("params are", req.params);
+
+    const toDelete = await Snippet.findByPk(id);
+    if (!toDelete) {
+      res.status(404).send("snippet not found");
+    } else {
+      const deleted = await toDelete.destroy();
+      res.json(deleted);
+    }
+  } catch (e) {
+    console.log("i am error message", e.message);
+    next(e);
+  }
+});
 module.exports = router;
