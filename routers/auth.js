@@ -3,6 +3,7 @@ const { Router } = require("express");
 const { toJWT } = require("../auth/jwt");
 const { SALT_ROUNDS } = require("../config/constants");
 const User = require("../models/").user;
+const auth = require("../auth/middleware");
 
 const router = new Router();
 
@@ -58,6 +59,11 @@ router.post("/signup", async (req, res) => {
         .send({ message: "There is an existing account with this email" });
     }
   }
+});
+
+router.get("/me", auth, async (req, res) => {
+  delete req.user.dataValues["password"];
+  res.status(200).json(req.user.dataValues);
 });
 
 module.exports = router;
