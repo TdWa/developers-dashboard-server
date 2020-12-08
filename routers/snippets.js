@@ -61,4 +61,21 @@ router.post("/", auth, async (req, res, next) => {
   }
 });
 
+router.delete("/", async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    console.log("params are", req.params);
+
+    const toDelete = await Snippet.findByPk(id);
+    if (!toDelete) {
+      res.status(404).send("snippet not found");
+    } else {
+      const deleted = await toDelete.destroy();
+      res.json(deleted);
+    }
+  } catch (e) {
+    console.log("i am error message", e.message);
+    next(e);
+  }
+});
 module.exports = router;
