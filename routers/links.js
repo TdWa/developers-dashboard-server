@@ -3,25 +3,6 @@ const Link = require("../models/").link;
 const router = new Router();
 const auth = require("../auth/middleware");
 
-router.get("/", auth, async (req, res, next) => {
-  try {
-    console.log("i am req.user", req.user);
-    const id = req.user.dataValues.id;
-    parseInt(id);
-    console.log("userId is  ", id);
-
-    const allLinksByUserId = await Link.findAll({
-      where: { userId: id },
-    });
-
-    res.status(200).send(allLinksByUserId);
-  } catch (e) {
-    console.log("i am error message", e.message);
-    next();
-  }
-});
-
-
 router.delete("/deleteLink", async (req, res) => {
   try {
     const { id } = req.body;
@@ -36,7 +17,6 @@ router.delete("/deleteLink", async (req, res) => {
     console.log(e);
   }
 });
-
 
 // create a link
 router.post("/", auth, async (req, res, next) => {
@@ -56,5 +36,24 @@ router.post("/", auth, async (req, res, next) => {
     next();
   }
 });
+
+/* get all links belonging to the user
+
+router.get("/", auth, async (req, res, next) => {
+  try {
+    const id = req.user.dataValues.id;
+
+    const allLinksByUserId = await Link.findAll({
+      where: { userId: id },
+    });
+
+    res.status(200).send(allLinksByUserId);
+  } catch (e) {
+    console.log("i am error message", e.message);
+    next();
+  }
+});
+
+*/
 
 module.exports = router;

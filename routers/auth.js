@@ -3,6 +3,9 @@ const { Router } = require("express");
 const { toJWT } = require("../auth/jwt");
 const { SALT_ROUNDS } = require("../config/constants");
 const User = require("../models/").user;
+const Category = require("../models/").category;
+const Snippet = require("../models/").snippet;
+const Link = require("../models/").link;
 const auth = require("../auth/middleware");
 
 const router = new Router();
@@ -24,7 +27,23 @@ router.post("/login", async (req, res) => {
     }
     delete user.dataValues["password"];
     const token = toJWT({ userId: user.id });
-    return res.status(200).send({ token, ...user.dataValues });
+
+    const categories = await Category.findAll({
+      where: { userId: user.dataValues.id },
+    });
+    const links = await Link.findAll({
+      where: { userId: user.dataValues.id },
+    });
+    const snippets = await Snippet.findAll({
+      where: { userId: user.dataValues.id },
+    });
+
+    return res.status(200).send({
+      user: { token, ...user.dataValues },
+      categories,
+      links,
+      snippets,
+    });
   } catch (e) {
     console.log(e);
     return res.status(400).send({ message: "Something went wrong, sorry" });
@@ -64,8 +83,29 @@ router.post("/signup", async (req, res) => {
 });
 
 router.get("/me", auth, async (req, res) => {
-  delete req.user.dataValues["password"];
-  res.status(200).json(req.user.dataValues);
+  try {
+    delete req.user.dataValues["password"];
+
+    const categories = await Category.findAll({
+      where: { userId: req.user.dataValues.id },
+    });
+    const links = await Link.findAll({
+      where: { userId: req.user.dataValues.id },
+    });
+    const snippets = await Snippet.findAll({
+      where: { userId: req.user.dataValues.id },
+    });
+
+    return res.status(200).send({
+      user: req.user.dataValues,
+      categories,
+      links,
+      snippets,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(400).send({ message: "Something went wrong, sorry" });
+  }
 });
 
 module.exports = router;
