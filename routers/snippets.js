@@ -71,8 +71,8 @@ router.delete("/", async (req, res, next) => {
     if (!toDelete) {
       res.status(404).send("snippet not found");
     } else {
-      const deleted = await toDelete.destroy();
-      res.json(deleted);
+      await toDelete.destroy();
+      res.json(id);
     }
   } catch (e) {
     console.log("i am error message", e.message);
