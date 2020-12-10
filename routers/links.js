@@ -8,13 +8,14 @@ router.delete("/deleteLink", async (req, res) => {
     const { id } = req.body;
     const toDelete = await Link.findByPk(id);
     if (!toDelete) {
-      res.status(404).send("Link not found");
+      res.status(404).send({ message: "Link not found" });
     } else {
       await toDelete.destroy();
       res.json(toDelete);
     }
   } catch (e) {
     console.log(e);
+    next(e);
   }
 });
 
@@ -33,7 +34,7 @@ router.post("/", auth, async (req, res, next) => {
     res.status(200).send(newLink);
   } catch (e) {
     console.log("i am error message", e.message);
-    next();
+    next(e);
   }
 });
 
