@@ -14,14 +14,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   link.init(
     {
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      content: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      name: { type: DataTypes.STRING, allowNull: false },
+      content: { type: DataTypes.TEXT, allowNull: false },
       userId: { type: DataTypes.INTEGER, allowNull: false },
       categoryId: { type: DataTypes.INTEGER, allowNull: false },
     },
