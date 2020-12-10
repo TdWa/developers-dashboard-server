@@ -5,7 +5,6 @@ const auth = require("../auth/middleware");
 
 router.patch("/", auth, async (req, res, next) => {
   try {
-    console.log("i got hetre");
     const { content, id } = req.body;
 
     const idToFind = parseInt(id);
@@ -19,12 +18,11 @@ router.patch("/", auth, async (req, res, next) => {
     return res.status(201).send({ message: " snippet updated", snippet });
   } catch (e) {
     console.log("i am error", e.message);
-    next();
+    next(e);
   }
 });
 router.patch("/comments", async (req, res, next) => {
   try {
-    // console.log("i got hetre");
     const { comment, id } = req.body;
 
     const idToFind = parseInt(id);
@@ -38,7 +36,7 @@ router.patch("/comments", async (req, res, next) => {
     return res.status(201).send({ message: " snippet updated", snippet });
   } catch (e) {
     console.log("i am error", e.message);
-    next();
+    next(e);
   }
 });
 
@@ -58,7 +56,7 @@ router.post("/", auth, async (req, res, next) => {
     res.status(200).send(newSnippet);
   } catch (e) {
     console.log("i am error message", e.message);
-    next();
+    next(e);
   }
 });
 
@@ -69,7 +67,7 @@ router.delete("/", async (req, res, next) => {
 
     const toDelete = await Snippet.findByPk(id);
     if (!toDelete) {
-      res.status(404).send("snippet not found");
+      res.status(404).send({ message: "snippet not found" });
     } else {
       await toDelete.destroy();
       res.json(id);
